@@ -14,9 +14,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void Awake()
     {
-        Screen.SetResolution(960, 540, false);
-        PhotonNetwork.SendRate = 60;
-        PhotonNetwork.SerializationRate = 30;
+        Screen.SetResolution(1920, 1080, false);
+        PhotonNetwork.SendRate = 90;
+        PhotonNetwork.SerializationRate = 60;
     }
 
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
@@ -24,21 +24,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
-        PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions { MaxPlayers = 4 }, null);
+        PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions { MaxPlayers = 12 }, null);
     }
 
     public override void OnJoinedRoom()
     {
         DisconnectPanel.SetActive(false);
-        StartCoroutine("DestroyBullet");
+        
         Spawn();
     }
 
-    IEnumerator DestroyBullet()
-    {
-        yield return new WaitForSeconds(0.2f);
-        foreach (GameObject GO in GameObject.FindGameObjectsWithTag("Bullet")) GO.GetComponent<PhotonView>().RPC("DestroyRPC", RpcTarget.All);
-    }
+    
 
     public void Spawn()
     {
